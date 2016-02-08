@@ -1,14 +1,29 @@
-// reference the http module so we can create a webserver
-var http = require("http");
+var http = require('http');
+var session = require('cookie-session');
 
-// create a server
-http.createServer(function(req, res) {
-    // on every request, we'll output 'Hello world'
-    res.end("Hello world from Cloud9!");
-}).listen(process.env.PORT, process.env.IP);
+var Assets = require('./backend/Assets');
+var API = require('./backend/API');
+var Default = require('./backend/Default');
 
-// Note: when spawning a server on Cloud9 IDE, 
-// listen on the process.env.PORT and process.env.IP environment variables
+var Router = require('./frontend/js/lib/Router')();
 
-// Click the 'Run' button at the top to start your server,
-// then click the URL that is emitted to the Output tab of the console
+Router
+.add('static', Assets)
+.add('api', API)
+.add(Default);
+
+var checkSession = function(req, res) {
+  session({
+    keys: ['nodejs-by-example']
+  })(req, res, function() {
+    Process(req, res);
+  });
+}
+
+var Process = function(req, res) {
+  Router.check(req.url, [req, res]);
+}
+// PORT must be 8080, 8081 or 8082. why is not process.env.PORT set properly?
+var app = http.createServer(checkSession).listen(8080, process.env.IP);
+console.log("Listening on " + process.env.IP + ":" + process.env.PORT);
+
