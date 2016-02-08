@@ -5,20 +5,20 @@ body {
   padding: 0;
   font-family: Helvetica, Tahoma;
   font-size: 18px;
-  color: #000000;
+  color: #03396c;
 }
 a {
-  color: #34a451;
+  color: #005b96;
   cursor: pointer;
 }
 a.button {
   text-decoration: none;
   border: none;
-  background: #34a451;
+  background: #005b96;
   color: #ffffff;
   padding: 0.4em 2em;
   font-size: 1em;
-  border-bottom: 0.2em solid #287d3e;
+  border-bottom: 0.2em solid #011f4b;
   outline: 0;
   cursor: pointer;
   border-radius: 2px;
@@ -40,18 +40,18 @@ hr {
 }
 .green-button {
   border: none;
-  background: #34a451;
+  background: #005b96;
   color: #ffffff;
   padding: 0.4em 2em;
   font-size: 1em;
-  border-bottom: 0.2em solid #287d3e;
+  border-bottom: 0.2em solid #011f4b;
   outline: 0;
   cursor: pointer;
   border-radius: 2px;
 }
 .green-button-active {
-  border-bottom: 0.1em solid #287d3e;
-  border-top: 0.1em solid #34a451;
+  border-bottom: 0.1em solid #011f4b;
+  border-top: 0.1em solid #005b96;
   transform: translate(0, 2px);
 }
 .container {
@@ -67,8 +67,8 @@ hr {
 header {
   margin: 0 0 .8em 0;
   padding: 0;
-  background: #94dda7;
-  border-bottom: 0.2em solid #287d3e;
+  background: #6497b1;
+  border-bottom: 0.2em solid #011f4b;
 }
 header nav {
   margin: 0;
@@ -97,7 +97,7 @@ header nav ul li a {
   font-size: .8em;
 }
 header nav ul li a:hover {
-  background: #34a451;
+  background: #005b96;
 }
 footer {
   font-size: .6em;
@@ -138,11 +138,11 @@ form input[type="file"] {
 }
 input[type="button"] {
   border: none;
-  background: #34a451;
+  background: #005b96;
   color: #ffffff;
   padding: 0.4em 2em;
   font-size: 1em;
-  border-bottom: 0.2em solid #287d3e;
+  border-bottom: 0.2em solid #011f4b;
   outline: 0;
   cursor: pointer;
   border-radius: 2px;
@@ -153,8 +153,8 @@ input[type="button"].attention {
   border-bottom: 0.2em solid #b92c29;
 }
 input[type="button"]:active {
-  border-bottom: 0.1em solid #287d3e;
-  border-top: 0.1em solid #34a451;
+  border-bottom: 0.1em solid #011f4b;
+  border-top: 0.1em solid #005b96;
   transform: translate(0, 2px);
 }
 form .error {
@@ -168,7 +168,7 @@ form .success {
   font-size: .9em;
   padding: 1em;
   margin: 0 0 1em 0;
-  background: #94dda7;
+  background: #b3cde0;
 }
 .friends-list {
   background: #FFF;
@@ -201,18 +201,18 @@ form .success {
 }
 .friend-list-item input[type="button"] {
   border: none;
-  background: #34a451;
+  background: #005b96;
   color: #ffffff;
   padding: 0.4em 2em;
   font-size: 1em;
-  border-bottom: 0.2em solid #287d3e;
+  border-bottom: 0.2em solid #011f4b;
   outline: 0;
   cursor: pointer;
   border-radius: 2px;
 }
 .friend-list-item input[type="button"]:active {
-  border-bottom: 0.1em solid #287d3e;
-  border-top: 0.1em solid #34a451;
+  border-bottom: 0.1em solid #011f4b;
+  border-top: 0.1em solid #005b96;
   transform: translate(0, 2px);
 }
 .content-item {
@@ -228,15 +228,4 @@ form .success {
 }
 .content-item img {
   max-width: 100%;
-}
-.chat-output {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  width: 100%;
-  height: 400px;
-  overflow: scroll;
-  padding: 1em;
-  margin: 0 0 1em 0;
-  border: 2px solid #c9cbd5;
 }
