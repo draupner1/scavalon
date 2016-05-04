@@ -1,10 +1,8 @@
-var Friends = require('../models/Friends');
-
 module.exports = Ractive.extend({
   template: require('../../tpl/profile'),
   components: {
-    navigation: require('../views/Navigation'),
-    appfooter: require('../views/Footer')
+    navigation: require('../view/Navigation'),
+    appfooter: require('../view/Footer')
   },
   data: {
     friends: []
@@ -34,10 +32,18 @@ module.exports = Ractive.extend({
         });
       }
     });
+    this.on('setCar', function() {
+      userModel.set('value.car', this.get('carId'));
+      userModel.set('value.swv', this.get('carSw'));
+      userModel.setCar(function(error, result) {
+        if(error) {
+          self.set('error', error.error);
+        } else {
+          self.set('error', false);
+          self.set('success', 'Car owner updated successfully.');
+        }
+      });
+    })
 
-    var friends = new Friends();
-    friends.fetch(function(err, result) {
-      self.set('friends', result.friends);
-    });
   }
 });

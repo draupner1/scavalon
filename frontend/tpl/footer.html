@@ -1,3 +1,24 @@
-<footer>
-  Version: {{version}}
-</footer>
+  <footer class="page-footer blue">
+    {{#if !isLogged }}
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <p class="grey-text text-lighten-4">Avalon Innovation, the inventive pal.</p>
+        </div>
+
+        <div class="col l3 s12">
+          <ul>
+            <li><a class="white-text">Mail to: some.one@avaloninnovation.com</a></li>
+            <li><a class="white-text">Address: Långholmsgatan 34, Stockholm</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+    <div class="footer-copyright">
+      <div class="container">
+      Version: {{version}}, Styled with <a class="brown-text text-lighten-3" href="http://materializecss.com">Materialize, by Avalon Innovation.</a>
+      </div>
+    </div>
+    <script type="text/javascript" src="/static/js/init.js"></script> 
+  </footer>

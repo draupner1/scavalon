@@ -37,5 +37,28 @@ module.exports = Base.extend({
   },
   isLogged: function() {
     return this.get('value.firstName') && this.get('value.lastName');
+  },
+  setCar: function(callback) {
+    var self = this;
+    ajax.request({
+      url: self.get('url') + '/car',
+      method: 'PUT',
+      data: {
+        car: this.get('value.car'),
+        swv: this.get('value.swv')
+        },
+      json: true
+    })
+    .done(function(result) {
+      if(callback) {
+        callback(null, result);
+      }
+    })
+    .fail(function(xhr) {
+      if(callback) {
+        callback(JSON.parse(xhr.responseText));
+      }
+    });
+//    return this;
   }
 });

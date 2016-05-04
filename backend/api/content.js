@@ -22,55 +22,44 @@ module.exports = function(req, res) {
           user.friends = [];
         }
         getDatabaseConnection(function(db) {
-          var collection = db.collection('content');
-          collection.find({ 
-            $query: {
-              userId: { $in: [user._id.toString()].concat(user.friends) },
-              pageId: { $exists: false }
-            },
-            $orderby: {
-              date: -1
-            }
-          }).toArray(function(err, result) {
-            var getFriendsProfiles = function(db, ids, callback) {
-              if(ids && ids.length > 0) {
-                var collection = db.collection('users');
-                ids.forEach(function(value, index, arr) {
-                  arr[index] = ObjectId(value);
-                });
-                collection.find({ 
-                  _id: { $in: ids }
-                }).toArray(function(err, friends) {
-                  var result = [];
-                  friends.forEach(function(friend) {
-                    result.push(friend.firstName + ' ' + friend.lastName);
-                  });
-                  callback(result);
-                });  
-              } else {
-                callback([]);
-              }
-            }
-            var numberOfPosts = result.length;
-            var friendsFetched = function() {
-              numberOfPosts -= 1;
-              if(numberOfPosts === 0) {
-                response({
-                  posts: result
-                }, res);
-              }
-            }
+          var collection = db.collection('laps');
+          
+          var ucol = db.collection('users');
+          var latest = [];
+          collection.find({}).sort({time:-1}).limit(4).toArray(function(err, result) {
             result.forEach(function(value, index, arr) {
-              arr[index].id = ObjectId(value._id);
-              arr[index].ownPost = user._id.toString() === ObjectId(arr[index].userId).toString();
-              arr[index].numberOfLikes = arr[index].likes ? arr[index].likes.length : 0;
-              delete arr[index].userId;
               delete arr[index]._id;
-              getFriendsProfiles(db, arr[index].taggedFriends, function(friends) {
-                arr[index].taggedFriends = friends;
-                friendsFetched();
+              ucol.find({email: arr[index].pid}).toArray(function(err, result) {
+                if(result.length > 0) {
+                  arr[index].userName = result[0].firstName + ' ' + result[0].lastName;
+                } else {
+                  arr[index].userName = '';
+                }
+                delete arr[index].pid;
               });
             });
+            latest = result;
+          });
+          
+          collection.find({}).sort({laptime:1}).limit(20).toArray(function(err, result) {
+            result.forEach(function(value, index, arr) {
+              delete arr[index]._id;
+              ucol.find({email: arr[index].pid}).toArray(function(err, result) {
+                if(result.length > 0) {
+                  arr[index].userName = result[0].firstName + ' ' + result[0].lastName;
+                } else {
+                  arr[index].userName = '';
+                }
+                delete arr[index].pid;
+                if(index + 1 >= arr.length) {
+                  response({
+                    posts: arr,
+                    latest: latest
+                  }, res);
+                }
+              });
+            });
+              
           });
         });
       }, req, res);

@@ -2,6 +2,7 @@ var Router = require('./lib/Router')();
 var Home = require('./controllers/Home');
 var Register = require('./controllers/Register');
 var Login = require('./controllers/Login');
+var NewRace = require('./controllers/NewRace');
 var Profile = require('./controllers/Profile');
 var FindFriends = require('./controllers/FindFriends');
 var Pages = require('./controllers/Pages');
@@ -17,11 +18,11 @@ var showPage = function(newPage) {
   currentPage.on('navigation.goto', function(e, route) {
     Router.navigate(route);
   });
-}
+};
 
 window.onload = function() {
 
-  body = document.querySelector('body .container');
+  body = document.querySelector('body .container2');
   userModel = new UserModel();
   userModel.fetch(function(error, result) {
     Router
@@ -35,6 +36,10 @@ window.onload = function() {
     })
     .add('login', function() {
       var p = new Login();
+      showPage(p);
+    })
+    .add('newrace', function() {
+      var p = new NewRace();
       showPage(p);
     })
     .add('find-friends', function() {
@@ -98,4 +103,5 @@ window.onload = function() {
     .check();
   });
 
-}
+  
+};

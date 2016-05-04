@@ -1,59 +1,158 @@
 <header>
   <navigation></navigation>
 </header>
-<div class="hero">
-  {{#if posting === true}}
-    <form enctype="multipart/form-data" method="post">
-      <h3>What is on your mind?</h3>
-      {{#if error && error != ''}}
-        <div class="error">{{error}}</div>
-      {{/if}}
-      {{#if success && success != ''}}
-        <div class="success">{{{success}}}</div>
-      {{/if}}
-      <label>Text</label>
-      <textarea value="{{text}}"></textarea>
-      {{#if friends.length > 0}}
-        <p>Tag friends:
-        {{#each friends:index}}
-          <label>
-            <input type="checkbox" name="{{taggedFriends}}" value="{{friends[index].id}}" />
-            {{friends[index].firstName}} {{friends[index].lastName}}
-          </label>
-        {{/each}}
-        </p>
-      {{/if}}
-      <input type="file" name="file" />
-      <input type="button" value="Post" on-click="post" />
-    </form>
-    {{#each posts:index}}
-      <div class="content-item">
-        <h2>{{posts[index].userName}}</h2>
-        <p>{{posts[index].text}}</p>
-        {{#if posts[index].via}}
-        <small>via {{posts[index].via}}</small>
-        {{/if}}
-        {{#if posts[index].taggedFriends.length > 0}}
-          <p>
-            <small>
-              Tagged: {{posts[index].taggedFriends.join(', ')}}
-            </small>
-          </p>
-        {{/if}}
-        <p>
-        <input type="button" value="Like ({{posts[index].numberOfLikes}})" on-click="like:{{posts[index].id}}" />
-        {{#if !posts[index].ownPost}}
-        <input type="button" value="Share" on-click="share:{{posts[index].id}}" />
-        {{/if}}
-        </p>
-        {{#if posts[index].file}}
-        <br /><br />
-        <img src="/static/uploads/{{posts[index].file}}" />
-        {{/if}}
+
+{{#if posting === true}}
+  <div class="container">
+  <h3>Ranking</h3>
+  <table class="bordered">
+    <thead>
+      <tr>
+        <th data-field="lane">Bana</th>
+        <th data-field="laptime">Varv Tid</th>
+        <th data-field="userName">Namn</th>
+        <th data-field="car">Bil</th>
+        <th data-field="swv">SW</th>
+        <th data-field="time">Tid</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each posts:index}}
+        <tr>
+          <td>{{posts[index].lane}}</td>
+          <td>{{posts[index].laptime}}</td>
+          <td>{{posts[index].userName}}</td>
+          <td>{{posts[index].car}}</td>
+          <td>{{posts[index].swv}}</td>
+          <td>{{posts[index].time}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  
+  <div class="divider"></div>
+  
+  <h3>Senaste Varvtider</h3>
+  <table class="bordered">
+    <thead>
+      <tr>
+        <th data-field="lane">Bana</th>
+        <th data-field="laptime">Varv Tid</th>
+        <th data-field="userName">Namn</th>
+        <th data-field="car">Bil</th>
+        <th data-field="swv">SW</th>
+        <th data-field="time">Tid</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each latest:index}}
+        <tr>
+          <td>{{latest[index].lane}}</td>
+          <td>{{latest[index].laptime}}</td>
+          <td>{{latest[index].userName}}</td>
+          <td>{{latest[index].car}}</td>
+          <td>{{latest[index].swv}}</td>
+          <td>{{latest[index].time}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <br>
+  </div>
+{{else}}
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <br><br>
+        <h1 class="header center blue-text text-lighten-2">Scalectrix by Avalon</h1>
+        <div class="row center">
+          <h5 class="header col s12 light blue-text">Programera din egen banbil.</h5>
+        </div>
+        <div class="row center">
+          <a href="/register" class="btn-large waves-effect waves-light blue lighten-1">Register</a>
+        </div>
+        <br><br>
       </div>
-    {{/each}}
-  {{else}}
-    <h1>IP Management & Administration</h1>
-  {{/if}}
-</div>
+    </div>
+    <div class="parallax"><img src="static/uploads/background1.jpg" alt="Unsplashed background img 1"></div>
+  </div>
+
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center blue-text darken-3"><i class="material-icons">flash_on</i></h2>
+            <h5 class="center">Hur snabbt kan du köra?</h5>
+
+            <p class="light">Gör din egen mjukvara till en av våra bilar. Hur snabbt vågar du låta dom köra? Hur kommer du runt alla kurvor? Hur når du kortaste varvtiden?</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center blue-text darken-3"><i class="material-icons">group</i></h2>
+            <h5 class="center">Tävla mot alla andra i en rankingserie.</h5>
+
+            <p class="light">Alla vartider under helgen kommer att sparas. Rankingen uppdateras efter varje tävling. Vem kommer att ligga i topp?</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center blue-text darken-3"><i class="material-icons">settings</i></h2>
+            <h5 class="center">Enkelt att programmera</h5>
+
+            <p class="light">Hämta ut ditt USB med ditt ID och våra libraries till en Arduinio-miljö. Sen är det bara att hacka ihop den bästa mjukvaran som går att ladda ner i våra bilar.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <h5 class="header col s12 light blue-text">Du styr den snabbaste bilen med din mjukvara!</h5>
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="static/uploads/background2.jpg" alt="Unsplashed background img 2"></div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row">
+        <div class="col s12 center">
+          <h3><i class="mdi-content-send blue-text darken-3"></i></h3>
+          <h4>Mer detaljerad beskrivning</h4>
+          <p class="left-align light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a sapien id, viverra ultrices eros. Morbi sem neque, posuere et pretium eget, bibendum sollicitudin lacus. Aliquam eleifend sollicitudin diam, eu mattis nisl maximus sed. Nulla imperdiet semper molestie. Morbi massa odio, condimentum sed ipsum ac, gravida ultrices erat. Nullam eget dignissim mauris, non tristique erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="parallax-container valign-wrapper">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <h5 class="header col s12 light blue-text">Arduino baserade banbilar!</h5>
+        </div>
+      </div>
+    </div>
+    <div class="parallax"><img src="static/uploads/background3.jpg" alt="Unsplashed background img 3"></div>
+  </div>
+{{/if}}
+
 <appfooter />

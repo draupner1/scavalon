@@ -14,7 +14,7 @@ Router
 
 var checkSession = function(req, res) {
   session({
-    keys: ['nodejs-by-example']
+    keys: ['scavalon-db']
   })(req, res, function() {
     Process(req, res);
   });

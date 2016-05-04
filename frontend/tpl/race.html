@@ -1,0 +1,49 @@
+<header>
+  <navigation></navigation>
+</header>
+
+{{#if raceId}}
+<!-- Display the new race -->
+  <div class="container">
+    <h1>Race</h1>
+    <p>Lane 1 {{firstLane}}</p>
+    <p>Lane 2 {{secondLane}}</p>
+  </div>
+  
+{{else}}
+<!-- Setup a new race -->
+  <div class="container">
+    <form method="post">
+      <h3>Add a new race</h3>
+      {{#if error && error != ''}}
+        <div class="error">{{error}}</div>
+      {{/if}}
+      {{#if success && success != ''}}
+        <div class="success">{{{success}}}</div>
+      {{else}}
+        <div class="s10">
+          <div class="input-field">
+            <input id="firstlane" type="text" value="{{firstLane}}"/>
+            <label for="firstlane">Bil Id, Bana 1</label>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="secondlane" value="{{secondLane}}" />
+            <label for="secondlane">Bil Id, Bana 2</label>
+          </div>
+          
+  <!--        <input type="button" value="register" on-click="register" />  -->
+          <div class ="row"></div>
+          <a class="waves-effect waves-light blue lighten-1 btn" on-click="create"><i class="material-icons right">send</i>setup</a>
+<!--          <button class="btn waves-effect waves-light blue lighten-1" on-click="setup">setup<i class="material-icons right">send</i></button> -->
+<!--          <button class="btn waves-effect waves-light blue lighten-1" on-click="readLanes" style="float: right;">Läs av banan <i class="material-icons right">input</i> </button> -->
+          <a class="waves-effect waves-light blue lighten-1 btn" on-click="readLanes" style="float: right;"><i class="material-icons right">input</i>Läs av banan</a>
+          <div class ="row"></div>
+        </div>
+      {{/if}}
+    </form>
+  </div>
+
+{{/if}}
+
+<appfooter />
