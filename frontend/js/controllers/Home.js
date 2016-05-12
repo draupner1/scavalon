@@ -35,6 +35,14 @@ module.exports = Ractive.extend({
       };
 
       getPosts();
+      setInterval(function() {
+        model.fetch(function(err, result) {
+          if(!err) {
+            self.set('posts', result.posts);
+            self.set('latest',result.latest);
+          }
+        });
+      }, 60000);
     } else {
       this.set('posting', false);
     }
