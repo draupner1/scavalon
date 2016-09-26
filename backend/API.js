@@ -7,6 +7,7 @@ Router
 .add('api/user/logout', require('./api/user-logout'))
 .add('api/user/car', require('./api/user-car'))
 .add('api/user', require('./api/user'))
+.add('api/content/:id', require('./api/content'))
 .add('api/content', require('./api/content'))
 .add('api/race/:id', require('./api/race'))
 .add('api/race', require('./api/race'))

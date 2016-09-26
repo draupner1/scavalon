@@ -58,6 +58,10 @@ p {
   font-size: inherit;
 }
 
+td, th {
+  padding: 5px 5px;
+}
+
 footer.page-footer {
   margin: 0;
   background-color: rgb(100, 151, 177);

@@ -7,7 +7,7 @@ var getDatabaseConnection = helpers.getDatabaseConnection;
 var processPOSTRequest = helpers.processPOSTRequest;
 var getCurrentUser = helpers.getCurrentUser;
 
-module.exports = function(req, res) {
+module.exports = function(req, res, params) {
   var user;
   if(req.session && req.session.user) {
     user = req.session.user;
@@ -22,10 +22,22 @@ module.exports = function(req, res) {
           user.friends = [];
         }
         getDatabaseConnection(function(db) {
+          var MAX_PER_PAGE = 15;
+          var pages = 1;
           var collection = db.collection('laps');
-          
           var ucol = db.collection('users');
           var latest = [];
+          var paginateit = 0;
+          var pno = params && params.id ? parseInt(params.id) : 1 ;  /// Ska vara nummer inte String!!!
+          
+          collection.count({}, function(err, numOfDocs){
+            if(numOfDocs > MAX_PER_PAGE)
+            { paginateit = 1;}
+            else
+            { paginateit = 0;}
+            pages = Math.floor(numOfDocs/MAX_PER_PAGE) + 1;
+          });
+          
           collection.find({}).sort({time:-1}).limit(4).toArray(function(err, result) {
             result.forEach(function(value, index, arr) {
               delete arr[index]._id;
@@ -40,8 +52,8 @@ module.exports = function(req, res) {
             });
             latest = result;
           });
-          
-          collection.find({}).sort({laptime:1}).limit(20).toArray(function(err, result) {
+
+          collection.find({}).sort({laptime:1}).skip(MAX_PER_PAGE*(pno-1)).limit(MAX_PER_PAGE).toArray(function(err, result) {
             result.forEach(function(value, index, arr) {
               delete arr[index]._id;
               ucol.find({email: arr[index].pid}).toArray(function(err, result) {
@@ -54,6 +66,9 @@ module.exports = function(req, res) {
                 if(index + 1 >= arr.length) {
                   response({
                     posts: arr,
+                    pagit : paginateit,
+                    pno  : pno,
+                    pages: pages,
                     latest: latest
                   }, res);
                 }

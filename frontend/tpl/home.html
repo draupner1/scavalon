@@ -4,8 +4,9 @@
 
 {{#if posting === true}}
   <div class="container">
-  <h3>Ranking</h3>
-  <table class="bordered">
+  <div class="rankingtab">
+  <h4>Ranking</h4>
+  <table class="striped">
     <thead>
       <tr>
         <th data-field="lane">Bana</th>
@@ -31,10 +32,32 @@
     </tbody>
   </table>
   
+  {{#if paginateit === 1}}
+    <ul class="pagination">
+    {{#if pno === 1}}
+      <li class="disabled"><a on-click="getNext:1"><i class="material-icons">chevron_left</i></a></li>
+    {{else}}
+      <li class="waves-effect"><a on-click="getNext:{{pno - 1}}"><i class="material-icons">chevron_left</i></a></li>
+    {{/if}}
+    {{#each pagelist:index}}
+      {{#if pno === index+1}}
+        <li class="active"><a on-click="getNext:{{index+1}}">{{pagelist[index]}}</a></li>
+      {{else}}
+        <li class="waves-effect"><a on-click="getNext:{{index+1}}">{{pagelist[index]}}</a></li>
+      {{/if}}
+    {{/each}}
+    {{#if pno === maxpages}}
+      <li class="disabled"><a on-click="getNext:{{maxpages}}"><i class="material-icons">chevron_right</i></a></li>
+    {{else}}
+      <li class="waves-effect"><a on-click="getNext:{{pno + 1}}"><i class="material-icons">chevron_right</i></a></li>
+    {{/if}}
+  {{/if}}
+  </div>
+  
   <div class="divider"></div>
   
-  <h3>Senaste Varvtider</h3>
-  <table class="bordered">
+  <h4>Senaste Varvtider</h4>
+  <table class="striped">
     <thead>
       <tr>
         <th data-field="lane">Bana</th>

@@ -1,5 +1,4 @@
 var ContentModel = require('../models/Content');
-var Friends = require('../models/Friends');
 
 module.exports = Ractive.extend({
   template: require('../../tpl/home'),
@@ -16,6 +15,8 @@ module.exports = Ractive.extend({
 
       var model = new ContentModel();
       var self = this;
+      var pagelist = [];
+      var pno = 1;
 
       this.on('post', function() {
       });
@@ -24,25 +25,54 @@ module.exports = Ractive.extend({
       });
       this.on('like', function(e, id) {
       });
+      
+      var doGetNext = function(rpn) {
+        console.log("Trying to get page :" + rpn);
+        model.fetisch(rpn, function(err, result) {
+          if(!err) {
+            self.set('posts', result.posts);
+            self.set('latest',result.latest);
+            self.set('paginateit', result.pagit);
+            self.set('pno', result.pno);
+            self.set('maxpages', result.pages);
+            pagelist = [];
+            for (var i = 1; i <= result.pages; i++) {
+              pagelist.push(i);
+            }
+            self.set('pagelist', pagelist);
+            console.log("Pagelist: " + pagelist);
+          }
+        });
+      };
+      
+      this.on('getNext', function(evt, rpn){
+        console.log("Now off to get page :" + rpn);
+        self.pno = rpn;
+        doGetNext(rpn);
+      });
 
       var getPosts = function() {
         model.fetch(function(err, result) {
           if(!err) {
             self.set('posts', result.posts);
             self.set('latest',result.latest);
+            self.set('paginateit', result.pagit);
+            self.set('pno', result.pno);
+            self.set('maxpages', result.pages);
+            pagelist = [];
+            for (var i = 1; i <= result.pages; i++) {
+              pagelist.push(i);
+            }
+            self.set('pagelist', pagelist);
+            console.log("Pagelist: " + pagelist);
           }
         });
       };
+      
+      doGetNext(pno);
 
-      getPosts();
-      setInterval(function() {
-        model.fetch(function(err, result) {
-          if(!err) {
-            self.set('posts', result.posts);
-            self.set('latest',result.latest);
-          }
-        });
-      }, 60000);
+//      getPosts();
+//      setInterval(getPosts, 60000);
     } else {
       this.set('posting', false);
     }
