@@ -4,8 +4,6 @@ var Register = require('./controllers/Register');
 var Login = require('./controllers/Login');
 var NewRace = require('./controllers/NewRace');
 var Profile = require('./controllers/Profile');
-var FindFriends = require('./controllers/FindFriends');
-var Pages = require('./controllers/Pages');
 var UserModel = require('./models/User');
 var currentPage;
 var body;
@@ -42,14 +40,6 @@ window.onload = function() {
       var p = new NewRace();
       showPage(p);
     })
-    .add('find-friends', function() {
-      if(userModel.isLogged()) {
-        var p = new FindFriends();
-        showPage(p);
-      } else {
-        Router.navigate('login');
-      }
-    })
     .add('logout', function() {
       userModel.logout(function(error, result) {
         window.location.href = '/';
@@ -58,39 +48,6 @@ window.onload = function() {
     .add('profile', function() {
       if(userModel.isLogged()) {
         var p = new Profile();
-        showPage(p);
-      } else {
-        Router.navigate('login');
-      }    
-    })
-    .add('pages/:id/:events', function(params) {
-      if(userModel.isLogged()) {
-        var p = new Pages({ 
-          data: {
-            pageId: params.id,
-            showEvents: !!params.events
-          }
-        });
-        showPage(p);
-      } else {
-        Router.navigate('login');
-      }
-    })
-    .add('pages/:id', function(params) {
-      if(userModel.isLogged()) {
-        var p = new Pages({ 
-          data: {
-            pageId: params.id
-          }
-        });
-        showPage(p);
-      } else {
-        Router.navigate('login');
-      }
-    })
-    .add('pages', function() {
-      if(userModel.isLogged()) {
-        var p = new Pages();
         showPage(p);
       } else {
         Router.navigate('login');

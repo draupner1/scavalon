@@ -18,9 +18,7 @@ module.exports = function(req, res, params) {
   switch(req.method) {
     case 'GET':
       getCurrentUser(function(user) {
-        if(!user.friends) {
-          user.friends = [];
-        }
+
         getDatabaseConnection(function(db) {
           var MAX_PER_PAGE = 15;
           var pages = 1;
@@ -93,9 +91,6 @@ module.exports = function(req, res, params) {
         }
         if(formData.eventDate) {
           data.eventDate = formData.eventDate;
-        }
-        if(formData.taggedFriends) {
-          data.taggedFriends = JSON.parse(formData.taggedFriends);
         }
         if(!data.text || data.text === '') {
           error('Please add some text.', res);

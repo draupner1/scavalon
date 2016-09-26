@@ -8,7 +8,6 @@ module.exports = Ractive.extend({
   },
   data: {
     posting: true,
-    taggedFriends: []
   },
   onrender: function() {
     if(userModel.isLogged()) {
@@ -19,11 +18,6 @@ module.exports = Ractive.extend({
       var pno = 1;
 
       this.on('post', function() {
-      });
-      
-      this.on('share', function(e, id) {
-      });
-      this.on('like', function(e, id) {
       });
       
       var doGetNext = function(rpn) {

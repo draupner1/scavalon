@@ -5,7 +5,6 @@ module.exports = Ractive.extend({
     appfooter: require('../view/Footer')
   },
   data: {
-    friends: []
   },
   onrender: function() {
     var self = this;
