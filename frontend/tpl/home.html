@@ -9,6 +9,7 @@
   <table class="striped">
     <thead>
       <tr>
+        <th data-field="frank">Rank</th>
         <th data-field="lane">Bana</th>
         <th data-field="laptime">Varv Tid</th>
         <th data-field="userName">Namn</th>
@@ -21,6 +22,7 @@
     <tbody>
       {{#each posts:index}}
         <tr>
+          <td>{{frank + index}}</td>
           <td>{{posts[index].lane}}</td>
           <td>{{posts[index].laptime}}</td>
           <td>{{posts[index].userName}}</td>

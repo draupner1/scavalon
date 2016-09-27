@@ -16,6 +16,7 @@ module.exports = Ractive.extend({
       var self = this;
       var pagelist = [];
       var pno = 1;
+      var frank = 1;
 
       this.on('post', function() {
       });
@@ -29,6 +30,7 @@ module.exports = Ractive.extend({
             self.set('paginateit', result.pagit);
             self.set('pno', result.pno);
             self.set('maxpages', result.pages);
+            self.set('frank', result.frank);
             pagelist = [];
             for (var i = 1; i <= result.pages; i++) {
               pagelist.push(i);

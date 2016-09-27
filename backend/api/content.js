@@ -65,6 +65,7 @@ module.exports = function(req, res, params) {
                   response({
                     posts: arr,
                     pagit : paginateit,
+                    frank : 1 + MAX_PER_PAGE*(pno - 1),
                     pno  : pno,
                     pages: pages,
                     latest: latest
