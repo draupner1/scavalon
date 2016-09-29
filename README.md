@@ -8,6 +8,7 @@ Running on NodeJS server with:
 *React
 *Mechanize
 
+Rankingsidan uppdateras var 60 s. (ändras frontend/js/controllers/Home.js)
 
 Installs on the server:
 npm install

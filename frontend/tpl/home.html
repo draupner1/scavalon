@@ -24,7 +24,20 @@
         <tr>
           <td>{{frank + index}}</td>
           <td>{{posts[index].lane}}</td>
-          <td>{{posts[index].laptime}}</td>
+          <td>
+            {{#with posts[index].itime}}
+              <ul class="collapsible" data-collapsible="accordion">
+                <li>
+                  <div class="collapsible-header">{{posts[index].laptime}}</div>
+                  <div class="collapsible-body">
+                    {{#each posts[index].itime}}<div>{{.}}</div>{{/each}}
+                  </div>
+                </li>
+              </ul>
+            {{else}}
+              {{posts[index].laptime}}
+            {{/with}}
+          </td>
           <td>{{posts[index].userName}}</td>
           <td>{{posts[index].car}}</td>
           <td>{{posts[index].swv}}</td>

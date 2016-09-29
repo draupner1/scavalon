@@ -21,8 +21,13 @@ module.exports = Ractive.extend({
       this.on('post', function() {
       });
       
+      var repeatGetNext = function() {
+//        console.log("repeat update of page :" + self.pno);
+        doGetNext(self.pno);
+      };
+      
       var doGetNext = function(rpn) {
-        console.log("Trying to get page :" + rpn);
+//        console.log("Trying to get page :" + rpn);
         model.fetisch(rpn, function(err, result) {
           if(!err) {
             self.set('posts', result.posts);
@@ -36,39 +41,22 @@ module.exports = Ractive.extend({
               pagelist.push(i);
             }
             self.set('pagelist', pagelist);
-            console.log("Pagelist: " + pagelist);
+            $(document).ready(function(){
+              $('.collapsible').collapsible();
+            });
           }
         });
       };
       
       this.on('getNext', function(evt, rpn){
-        console.log("Now off to get page :" + rpn);
+//        console.log("Now off to get page :" + rpn);
         self.pno = rpn;
         doGetNext(rpn);
+        
       });
-
-      var getPosts = function() {
-        model.fetch(function(err, result) {
-          if(!err) {
-            self.set('posts', result.posts);
-            self.set('latest',result.latest);
-            self.set('paginateit', result.pagit);
-            self.set('pno', result.pno);
-            self.set('maxpages', result.pages);
-            pagelist = [];
-            for (var i = 1; i <= result.pages; i++) {
-              pagelist.push(i);
-            }
-            self.set('pagelist', pagelist);
-            console.log("Pagelist: " + pagelist);
-          }
-        });
-      };
       
       doGetNext(pno);
-
-//      getPosts();
-//      setInterval(getPosts, 60000);
+      setInterval(repeatGetNext, 60000);
     } else {
       this.set('posting', false);
     }

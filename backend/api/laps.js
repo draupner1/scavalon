@@ -25,7 +25,8 @@ module.exports = function(req, res) {
         mxacc: formData.maxAccel,
         mxdec: formData.maxDecel,
         mxlat: formData.maxLateral,
-        mxtur: formData.maxTurn
+        mxtur: formData.maxTurn,
+        itime: formData.inttime
       };
 
       getDatabaseConnection(function(db) {
