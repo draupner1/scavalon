@@ -1,4 +1,4 @@
-# ScAvalon
+# SlotCarduion
 
 Webapplication for the Scalectric Automatic Competition server.
 
@@ -6,7 +6,7 @@ Running on NodeJS server with:
 *MongoDB
 *Gulp
 *React
-*Mechanize
+*MaterializeCSS
 
 Rankingsidan uppdateras var 60 s. (ändras frontend/js/controllers/Home.js)
 
