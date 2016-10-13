@@ -5,7 +5,7 @@ Webapplication for the Scalectric Automatic Competition server.
 Running on NodeJS server with:
 *MongoDB
 *Gulp
-*React
+*Ractive
 *MaterializeCSS
 
 Rankingsidan uppdateras var 60 s. (ändras frontend/js/controllers/Home.js)
