@@ -4,34 +4,12 @@ module.exports = Base.extend({
   data: {
     url: '/api/race'
   },
-    login: function(callback) {
-    var self = this;
-    ajax.request({
-      url: this.get('url') + '/login',
-      method: 'POST',
-      data: {
-        email: this.get('email'),
-        password: this.get('password')
-      },
-      json: true
-    })
-    .done(function(result) {
-      callback(null, result);
-    })
-    .fail(function(xhr) {
-      callback(JSON.parse(xhr.responseText));
-    });
-  },
-  create: function(callback) {
+  create: function(formData, callback) {
     var self = this;
     ajax.request({
       url: this.get('url'),
       method: 'POST',
-      data: {
-        //laps: this.get('laps'),
-        firstlane: this.get('firstlane'),
-        secondlane: this.get('secondlane')
-      },
+      formData: formData,
       json: true
     })
     .done(function(result) {
@@ -42,7 +20,6 @@ module.exports = Base.extend({
     });
   },
   getRace: function(raceId, callback) {
-    var self = this;
     ajax.request({
       url: this.get('url') + '/' + raceId,
       method: 'GET',
@@ -54,5 +31,38 @@ module.exports = Base.extend({
     .fail(function(xhr) {
       callback(JSON.parse(xhr.responseText));
     });
-  }
+  },
+  getRaces: function(callback) {
+    ajax.request({
+      url: this.get('url'),
+      method: 'GET',
+      json: true
+    })
+    .done(function(result) {
+      callback(null, result);
+    })
+    .fail(function(xhr) {
+      callback(JSON.parse(xhr.responseText));
+    });
+  },
+  activate: function(id, cb) {
+    var self = this;
+    ajax.request({
+      url: self.get('url'),
+      method: 'PUT',
+      data: {"activeRace":id},
+      json: true
+    })
+    .done(function(result) {
+      if(cb) {
+        cb(null, result);
+      }
+    })
+    .fail(function(xhr) {
+      if(cb) {
+        cb(JSON.parse(xhr.responseText));
+      }
+    });
+    return this;
+  },
 });

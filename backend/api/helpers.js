@@ -53,11 +53,66 @@ var getCurrentUser = function(callback, req, res) {
   });
 };
 
+var getNextCounter = function(callback) {
+  getDatabaseConnection(function(db){
+    var count = db.collection('counters');
+    var oldId = count.find( { _id: 'race'} ).toArray(function(err, result) {
+      if(result.length === 0) {
+        error('No such counter', res);
+      } else {
+        var newId = result[0].seq + 1;
+        count.update({_id:"race"}, {$inc: {seq:1}}, {upsert: true});
+        callback(newId);
+      }
+    });
+  });
+};
+
+var getActiveRace = function(callback) {
+  getDatabaseConnection(function(db){
+    var count = db.collection('counters');
+    var oldId = count.find( { _id: "active"} ).toArray(function(err, result) {
+      if(result.length === 0) {
+        error('No such race', result);
+      } else {
+        callback(result[0].seq);
+      }
+    });
+  });
+};
+
+var setActiveRace = function(actId) {
+  getDatabaseConnection(function(db){
+    var count = db.collection('counters');
+    count.update({_id:"active"}, {$set: {seq:actId}}, {upsert: true});
+  });
+};
+
+var getActiveRaceTitle = function(callback){
+  getActiveRace( function(id){
+    getDatabaseConnection(function(db){
+      var races = db.collection('races');
+      races.find({_id:id}).toArray(function (err,result){
+        if(result.length === 0){
+          console.log('No Title found on Active race');
+          callback("");
+        } else {
+          callback(result[0].title);
+        }
+      });
+    });
+  });
+};
+
 module.exports = {
   response: response,
   error: error,
   getDatabaseConnection: getDatabaseConnection,
   processPOSTRequest: processPOSTRequest,
   validEmail: validEmail,
-  getCurrentUser: getCurrentUser
+  getCurrentUser: getCurrentUser,
+  getNextCounter: getNextCounter,
+  getActiveRace: getActiveRace,
+  setActiveRace: setActiveRace,
+  getActiveRaceTitle: getActiveRaceTitle
 };

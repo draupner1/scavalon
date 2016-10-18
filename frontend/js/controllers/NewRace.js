@@ -28,36 +28,63 @@ module.exports = Ractive.extend({
         });
       }
       showPage();
-      
-      
       return;
     }
-    this.on('readLanes', function() {
-      self.set('firstLane', '#24');
-      self.set('secondLane', '#42');
-      Materialize.updateTextFields();
-//      showPage();
+    
+    this.on('showImage', function(file) {
+      this.set('imageFile', "static/uploads/" + file.context);
+      $('#modalShowImage').openModal();
     });
-
-    this.on('create', function() {
-      var formData = new FormData();
-      model.create(function(error, result) {
+    
+    this.on('forgetImage', function() {
+      this.set('imageFile', "");
+    });
+    
+    this.on('setActive', function(index){
+      model.activate(index.context._id, function(error, result) {
         if(error) {
           self.set('error', error.error);
         } else {
           self.set('error', false);
-          self.set('success', 'The race is prepared successfully. Go <a href="">there</a> and race.');
-          self.set('raceId', '23');
+          self.set('success', 'The race is prepared successfully.');
+        }
+        getRaces();
+      });
+    });
+
+    this.on('create', function() {
+      var files = this.find('input[type="file"]').files;
+      var formData = new FormData();
+      if(files.length > 0) {
+        var file = files[0];
+        if(file.type.match('image.*')) {
+          formData.append('files', file, file.name);
+        }
+      }
+      formData.append('title', this.get('title'));
+      formData.append('descr', this.get('descr'));
+      formData.append('notation', this.get('notation'));
+      model.create(formData, function(error, result) {
+        if(error) {
+          self.set('error', error.error);
+        } else {
+          self.set('error', false);
+          self.set('success', 'The race is prepared successfully.');
         }
         getRaces();
       });
     });
 
     var getRaces = function() {
-      model.fetch(function(err, result) {
+      model.getRaces(function(err, result) {
         if(!err) {
-          self.set('raceses', result.races);
+          self.set('races', result.races);
+          self.set('activeRace', result.activeRace);
+          self.set('activeRaceTitle', result.activeRaceTitle);
         }
+        $(document).ready(function(){
+          $('.collapsible').collapsible();
+        });
       });
     };
 

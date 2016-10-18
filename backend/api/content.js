@@ -6,6 +6,7 @@ var error = helpers.error;
 var getDatabaseConnection = helpers.getDatabaseConnection;
 var processPOSTRequest = helpers.processPOSTRequest;
 var getCurrentUser = helpers.getCurrentUser;
+var getActiveRaceTitle = helpers.getActiveRaceTitle;
 
 module.exports = function(req, res, params) {
   var user;
@@ -18,6 +19,7 @@ module.exports = function(req, res, params) {
   switch(req.method) {
     case 'GET':
       getCurrentUser(function(user) {
+        getActiveRaceTitle(function(actTitle) {
 
         getDatabaseConnection(function(db) {
           var MAX_PER_PAGE = 15;
@@ -68,13 +70,15 @@ module.exports = function(req, res, params) {
                     frank : 1 + MAX_PER_PAGE*(pno - 1),
                     pno  : pno,
                     pages: pages,
-                    latest: latest
+                    latest: latest,
+                    activeRaceTitle: actTitle
                   }, res);
                 }
               });
             });
               
           });
+        });
         });
       }, req, res);
     break;

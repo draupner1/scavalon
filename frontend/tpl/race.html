@@ -2,19 +2,84 @@
   <navigation></navigation>
 </header>
 
-{{#if raceId}}
-<!-- Display the new race -->
   <div class="container">
-    <h1>Race</h1>
-    <p>Lane 1 {{firstLane}}</p>
-    <p>Lane 2 {{secondLane}}</p>
+  <div class="racetab">
+  <div class="row">
+    <h4> <div style="float:left;"> Races</div> <div style="float:right;">Active Race: {{activeRaceTitle}}</div> <div style="clear: left;"/> </h4>
+  </div>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th data-field="title">Title</th>
+        <th data-field="descr">Beskrivning</th>
+        <th data-field="creation">Startad</th>
+        <th data-field="image">Bild</th>
+        <th data-field="activeRace">Sätt Aktiv</th>
+        <th data-field="notation">Notation</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each races:index}}
+        <tr>
+          <td>{{races[index].title}}</td>
+          <td> {{races[index].descr}} </td>
+          <td>{{races[index].date}}</td>
+          <td>
+            {{#with races[index].file}}
+              <a class="waves-effect waves-light blue lighten-1 btn-small" on-click="showImage:{{races[index].file}}">bild</a>
+            {{else}}
+              {{races[index].file}}
+            {{/with}}
+          </td>
+          <td><a class="waves-effect waves-light blue lighten-1 btn-small" on-click="setActive:{{races[index]._id}}">aktivera</a></td>
+          <td>
+            {{#with races[index].notation}}
+              <ul class="collapsible" data-collapsible="accordion">
+                <li>
+                  <div class="collapsible-header">Not.</div>
+                  <div class="collapsible-body">{{races[index].notation}} </div>
+                </li>
+              </ul>
+            {{else}}
+              {{races[index].notation}}
+            {{/with}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  
+  {{#if paginateit === 1}}
+    <ul class="pagination">
+    {{#if pno === 1}}
+      <li class="disabled"><a on-click="getNext:1"><i class="material-icons">chevron_left</i></a></li>
+    {{else}}
+      <li class="waves-effect"><a on-click="getNext:{{pno - 1}}"><i class="material-icons">chevron_left</i></a></li>
+    {{/if}}
+    {{#each pagelist:index}}
+      {{#if pno === index+1}}
+        <li class="active"><a on-click="getNext:{{index+1}}">{{pagelist[index]}}</a></li>
+      {{else}}
+        <li class="waves-effect"><a on-click="getNext:{{index+1}}">{{pagelist[index]}}</a></li>
+      {{/if}}
+    {{/each}}
+    {{#if pno === maxpages}}
+      <li class="disabled"><a on-click="getNext:{{maxpages}}"><i class="material-icons">chevron_right</i></a></li>
+    {{else}}
+      <li class="waves-effect"><a on-click="getNext:{{pno + 1}}"><i class="material-icons">chevron_right</i></a></li>
+    {{/if}}
+  {{/if}}
   </div>
   
-{{else}}
-<!-- Setup a new race -->
-  <div class="container">
-    <form method="post">
-      <h3>Add a new race</h3>
+  <div class="divider"></div>
+  
+  <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modalNewRace"><i class="material-icons">add</i></a>
+
+  <div id="modalNewRace" class="modal">
+    <div class="modal-content">
+      <h4>Nytt Race</h4>
+      <form enctype="multipart/form-data" method="post">
       {{#if error && error != ''}}
         <div class="error">{{error}}</div>
       {{/if}}
@@ -23,27 +88,50 @@
       {{else}}
         <div class="s10">
           <div class="input-field">
-            <input id="firstlane" type="text" value="{{firstLane}}"/>
-            <label for="firstlane">Bil Id, Bana 1</label>
+            <input id="Title" type="text" value="{{title}}"/>
+            <label for="Title">Titel</label>
           </div>
 
           <div class="input-field">
-            <input type="text" id="secondlane" value="{{secondLane}}" />
-            <label for="secondlane">Bil Id, Bana 2</label>
+            <input type="text" id="descr" value="{{descr}}" />
+            <label for="descr">Beskrivning</label>
           </div>
-          
-  <!--        <input type="button" value="register" on-click="register" />  -->
+
+          <div class="file-field input-field">
+            <div class="waves-effect waves-light blue lighten-1 btn">
+              <span>Bild fil</span>
+              <input type="file">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" value="{{file}}">
+            </div>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="notation" value="{{notation}}" />
+            <label for="notation">Notation</label>
+          </div>
+
           <div class ="row"></div>
-          <a class="waves-effect waves-light blue lighten-1 btn" on-click="create"><i class="material-icons right">send</i>setup</a>
-<!--          <button class="btn waves-effect waves-light blue lighten-1" on-click="setup">setup<i class="material-icons right">send</i></button> -->
-<!--          <button class="btn waves-effect waves-light blue lighten-1" on-click="readLanes" style="float: right;">Läs av banan <i class="material-icons right">input</i> </button> -->
-          <a class="waves-effect waves-light blue lighten-1 btn" on-click="readLanes" style="float: right;"><i class="material-icons right">input</i>Läs av banan</a>
-          <div class ="row"></div>
+          <div class="modal-footer">
+            <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: left;" on-click="create">Skapa</a>
+            <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: right;">Avbryt</a>
+          </div>
         </div>
       {{/if}}
-    </form>
+      </form>
+    </div>
   </div>
-
-{{/if}}
-
+  
+  
+  <div id="modalShowImage" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <img class="responsive-img" src={{imageFile}} alt="Unsplashed track img">
+    </div>
+    <div class ="row"></div>
+    <div class="modal-footer">
+     <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: right;"  on-click="forgetImage">Avbryt</a>
+    </div>
+  </div>
+  
 <appfooter />

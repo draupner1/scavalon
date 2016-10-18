@@ -36,6 +36,7 @@ module.exports = Ractive.extend({
             self.set('pno', result.pno);
             self.set('maxpages', result.pages);
             self.set('frank', result.frank);
+            self.set('activeRaceTitle', result.activeRaceTitle);
             pagelist = [];
             for (var i = 1; i <= result.pages; i++) {
               pagelist.push(i);
@@ -56,9 +57,15 @@ module.exports = Ractive.extend({
       });
       
       doGetNext(pno);
-      setInterval(repeatGetNext, 60000);
+      self.interval = setInterval(repeatGetNext, 60000);
     } else {
       this.set('posting', false);
     }
+  },
+  
+  onunrender: function() {
+    var self = this;
+    clearInterval( self.interval );
+    
   }
 });

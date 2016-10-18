@@ -4,5 +4,6 @@
     $('.button-collapse').sideNav({closeOnClick: true});
     $('.parallax').parallax();
     $('.collapsible').collapsible();
+    $('.modal-trigger').leanModal();
   }); // end of document ready
 })(jQuery); // end of jQuery name space
