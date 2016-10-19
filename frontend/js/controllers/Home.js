@@ -1,4 +1,5 @@
 var ContentModel = require('../models/Content');
+var RaceModel = require('../models/Race');
 
 module.exports = Ractive.extend({
   template: require('../../tpl/home'),
@@ -8,18 +9,35 @@ module.exports = Ractive.extend({
   },
   data: {
     posting: true,
+    
   },
   onrender: function() {
     if(userModel.isLogged()) {
 
       var model = new ContentModel();
+      var races = new RaceModel();
       var self = this;
       var pagelist = [];
-      var pno = 1;
       var frank = 1;
+      self.pno = 1;
+      self.viewRace = 1;
 
       this.on('post', function() {
       });
+      
+      var doGetRaces = function() {
+        races.getRaces(function(err, result) {
+          if(!err) {
+            self.set('races', result.races);
+          }
+          $('select').material_select();
+          $('#viewSelect').change(function(){
+            self.viewRace=$('#viewSelect').val();
+            console.log("Selected change: "+self.viewRace);
+            doGetNext(1);
+          })
+        });
+      };
       
       var repeatGetNext = function() {
 //        console.log("repeat update of page :" + self.pno);
@@ -28,7 +46,7 @@ module.exports = Ractive.extend({
       
       var doGetNext = function(rpn) {
 //        console.log("Trying to get page :" + rpn);
-        model.fetisch(rpn, function(err, result) {
+        model.fetisch(rpn, self.viewRace, function(err, result) {
           if(!err) {
             self.set('posts', result.posts);
             self.set('latest',result.latest);
@@ -56,7 +74,8 @@ module.exports = Ractive.extend({
         
       });
       
-      doGetNext(pno);
+      doGetNext(self.pno);
+      doGetRaces();
       self.interval = setInterval(repeatGetNext, 60000);
     } else {
       this.set('posting', false);

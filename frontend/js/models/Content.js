@@ -19,11 +19,12 @@ module.exports = Base.extend({
       callback(JSON.parse(xhr.responseText));
     });
   },
-  fetisch: function( rpn, cb) {
+  fetisch: function( rpn, rvr, cb) {
     var self = this;
     ajax.request({
       url: self.get('url') + '/' + rpn,
-      json: true
+      data: { race: rvr },
+      json: true,
     })
     .done(function(result) {
       self.set('value', result);

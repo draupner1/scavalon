@@ -6,7 +6,19 @@
   <div class="container">
   <div class="rankingtab">
   <div class="row">
-    <h4> <div style="float:left;"> Ranking</div> <div style="float:right;">Active Race: {{activeRaceTitle}}</div> <div style="clear: left;"/> </h4>
+    <h4> <div style="float:left;"> Ranking</div></h4>
+    <center>
+      <div class="input-field col s4">
+        <select id="viewSelect">
+          <option value disabled selected></option>
+          {{#each races:index}}
+            <option value="{{races[index]._id}}">{{races[index].title}}</option>
+          {{/each}}
+        </select>
+        <label>Välj Race för rankingen</label>
+      </div>
+    </center>
+    <div style="float:right;">Active Race: {{activeRaceTitle}}</div> <div style="clear: left;"/> 
   </div>
   <table class="striped">
     <thead>

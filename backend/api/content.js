@@ -1,6 +1,8 @@
 var ObjectId = require('mongodb').ObjectID;
 var helpers = require('./helpers');
+var queryString = require('querystring');
 var fs = require('fs');
+var formidable = require('formidable');
 var response = helpers.response;
 var error = helpers.error;
 var getDatabaseConnection = helpers.getDatabaseConnection;
@@ -18,73 +20,96 @@ module.exports = function(req, res, params) {
   }
   switch(req.method) {
     case 'GET':
-      getCurrentUser(function(user) {
-        getActiveRaceTitle(function(actTitle) {
 
-        getDatabaseConnection(function(db) {
-          var MAX_PER_PAGE = 15;
-          var pages = 1;
-          var collection = db.collection('laps');
-          var ucol = db.collection('users');
-          var latest = [];
-          var paginateit = 0;
-          var pno = params && params.id ? parseInt(params.id) : 1 ;  /// Ska vara nummer inte String!!!
-          
-          collection.count({}, function(err, numOfDocs){
-            if(numOfDocs > MAX_PER_PAGE)
-            { paginateit = 1;}
-            else
-            { paginateit = 0;}
-            pages = Math.floor(numOfDocs/MAX_PER_PAGE) + 1;
-          });
-          
-          collection.find({}).sort({time:-1}).limit(4).toArray(function(err, result) {
-            result.forEach(function(value, index, arr) {
-              delete arr[index]._id;
-              ucol.find({email: arr[index].pid}).toArray(function(err, result) {
-                if(result.length > 0) {
-                  arr[index].userName = result[0].firstName + ' ' + result[0].lastName;
-                } else {
-                  arr[index].userName = '';
-                }
-                delete arr[index].pid;
-              });
-            });
-            latest = result;
-          });
+        
+        getCurrentUser(function(user) {
+          getActiveRaceTitle(function(actTitle) {
 
-          collection.find({}).sort({laptime:1}).skip(MAX_PER_PAGE*(pno-1)).limit(MAX_PER_PAGE).toArray(function(err, result) {
-            result.forEach(function(value, index, arr) {
-              delete arr[index]._id;
-              ucol.find({email: arr[index].pid}).toArray(function(err, result) {
-                if(result.length > 0) {
-                  arr[index].userName = result[0].firstName + ' ' + result[0].lastName;
-                } else {
-                  arr[index].userName = '';
-                }
-                delete arr[index].pid;
-                if(index + 1 >= arr.length) {
-                  response({
-                    posts: arr,
-                    pagit : paginateit,
-                    frank : 1 + MAX_PER_PAGE*(pno - 1),
-                    pno  : pno,
-                    pages: pages,
-                    latest: latest,
-                    activeRaceTitle: actTitle
-                  }, res);
-                }
-              });
+          getDatabaseConnection(function(db) {
+            var MAX_PER_PAGE = 15;
+            var pages = 1;
+            var collection = db.collection('laps');
+            var ucol = db.collection('users');
+            var latest = [];
+            var paginateit = 0;
+            var pno = params && params.id ? parseInt(params.id, 10) : 1 ;  /// Ska vara nummer inte String!!!
+            var queryParams = 0;
+            var viewRace = 1;
+            if (req.url.indexOf('?') >= 0) {
+              queryParams = queryString.parse(req.url.replace(/^.*\?/, ''));
+              viewRace = parseInt(queryParams.race, 10);
+            }
+  ///          var viewRace = params && params.class.
+          
+            collection.count({}, function(err, numOfDocs){
+              if(numOfDocs > MAX_PER_PAGE)
+              { paginateit = 1;}
+              else
+              { paginateit = 0;}
+              pages = Math.floor(numOfDocs/MAX_PER_PAGE) + 1;
             });
-              
+          
+            collection.find({}).sort({time:-1}).limit(4).toArray(function(err, result) {
+              result.forEach(function(value, index, arr) {
+                delete arr[index]._id;
+                ucol.find({email: arr[index].pid}).toArray(function(err, result) {
+                  if(result.length > 0) {
+                    arr[index].userName = result[0].firstName + ' ' + result[0].lastName;
+                  } else {
+                    arr[index].userName = '';
+                  }
+                  delete arr[index].pid;
+                });
+              });
+              latest = result;
+            });
+
+            collection.find({"race":viewRace}).sort({laptime:1}).skip(MAX_PER_PAGE*(pno-1)).limit(MAX_PER_PAGE).toArray(function(err, result) {
+              if(result.length>0){
+                result.forEach(function(value, index, arr) {
+                  delete arr[index]._id;
+                  ucol.find({email: arr[index].pid}).toArray(function(err, result) {
+                    if(result.length > 0) {
+                      arr[index].userName = result[0].firstName + ' ' + result[0].lastName;
+                    } else {
+                      arr[index].userName = '';
+                    }
+                    delete arr[index].pid;
+                    if(index + 1 >= arr.length) {
+                      response({
+                        posts: arr,
+                        pagit : paginateit,
+                        frank : 1 + MAX_PER_PAGE*(pno - 1),
+                        pno  : pno,
+                        pages: pages,
+                        latest: latest,
+                        activeRaceTitle: actTitle
+                      }, res);
+                    }
+                  });
+                });
+              } else {
+                paginateit = 0;
+                pno = 1
+                pages = 1
+                response({
+                  posts: [],
+                  pagit : paginateit,
+                  frank : 1 + MAX_PER_PAGE*(pno - 1),
+                  pno  : pno,
+                  pages: pages,
+                  latest: latest,
+                  activeRaceTitle: actTitle
+                }, res);
+              }
+            });
           });
-        });
-        });
-      }, req, res);
+          });
+       }, req, res);
+    
     break;
     case 'POST':
       var uploadDir = __dirname + '/../../static/uploads/';
-      var formidable = require('formidable');
       var form = new formidable.IncomingForm();
       form.multiples = true;
       form.parse(req, function(err, formData, files) {
