@@ -41,7 +41,7 @@ module.exports = function(req, res, params) {
             }
   ///          var viewRace = params && params.class.
           
-            collection.count({}, function(err, numOfDocs){
+            collection.count({"race":viewRace}, function(err, numOfDocs){
               if(numOfDocs > MAX_PER_PAGE)
               { paginateit = 1;}
               else

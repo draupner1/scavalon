@@ -27,43 +27,39 @@
             <label for="password">Change password</label>
           </div>
           <div>
-            <!-- <input type="button" value="update" on-click="updateProfile" /> -->
             <a class="waves-effect waves-light blue lighten-1 btn" on-click="updateProfile"><i class="material-icons right">send</i>update</a>
-<!--            <button class="btn waves-effect waves-light blue lighten-1" type="submit" name="action" on-click="updateProfile" >Update<i class="material-icons right">send</i> </button> -->
-            <!-- <input type="button" value="delete account" on-click="deleteProfile" class="right attention"/> -->
             <a class="waves-effect waves-light blue lighten-1 btn" on-click="deleteProfile" style="float: right;"><i class="material-icons right">delete</i>delete</a>
-<!--            <button class="btn waves-effect waves-light blue lighten-1" type="submit" name="action" on-click="deleteProfile" style="float: right;">Delete <i class="material-icons right">delete</i> </button> -->
+          </div>
+          <div class="divider"></div>
+           <div>
+            <a class="waves-effect waves-light blue lighten-1 btn modal-trigger" href="#modalCreateUsb"><i class="material-icons right">perm_media</i>USB</a>
           </div>
         </div>
       </div>
   </form>
 </div>
-<!--
-<div class="divider"></div>
-<div class="row">
-  <form class="col s10">
-    <div class="row">
-      {{#if error && error != ''}}
-        <div class="error">{{{error}}}</div>
-      {{/if}}
-      {{#if success && success != ''}}
-        <div class="success">{{{success}}}</div>
-      {{/if}}
-        <div class="s10">
-          <div class="input-field">
-            <input type="text" id="car-id" value="{{carId}}"/>
-            <label for="car-i" class="active">Bil Id</label>
-          </div>
-          <div class="input-field">
-            <input type="text" id="car-sw" value="{{carSw}}" />
-            <label for="car-sw" class="active">Mjukvaru versions</label>
-          </div>
-          <div>
-            <a class="waves-effect waves-light blue lighten-1 btn" on-click="setCar"><i class="material-icons right">send</i>sätt bil</a>
-          </div>
-        </div>
+
+<div id="modalCreateUsb" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <div class ="row"></div>
+    
+    <p class="light">Här kan du skapa ett USB minne med allt du behöver för att göra din kod till Arduino-bilarna, personifierat med din Profil.</p>
+
+    <div class="file-field input-field">
+      <div class="waves-effect waves-light blue lighten-1 btn">
+        <span>Bild fil</span>
+        <input type="file">
       </div>
-  </form>
-</div>  -->
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text" value="{{file}}">
+      </div>
+    </div>
+  </div>
+    
+  <div class="modal-footer">
+    <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn disabled" style="float: left;" on-click="createUsb">Skapa USB</a>
+    <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: right;">Avbryt</a>
+  </div>
+</div>
 
 <appfooter />

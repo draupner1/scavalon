@@ -112,6 +112,32 @@
     </tbody>
   </table>
   <br>
+  <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modalStartLap"><i class="material-icons">add</i></a>
+
+  <div id="modalStartLap" class="modal">
+    <div class="modal-content">
+      <h4>Starta Bilarna</h4>
+      <form enctype="multipart/form-data" method="post">
+      {{#if error && error != ''}}
+        <div class="error">{{error}}</div>
+      {{/if}}
+      {{#if success && success != ''}}
+        <div class="success">{{{success}}}</div>
+      {{else}}
+        <div class="s10">
+          <p class="light">När en koppling mot banan finns uppe kommer det här finnas en möjlighet att starta ett heat</p>
+    
+          <div class ="row"></div>
+          <div class="modal-footer">
+            <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn disabled" style="float: left;" on-click="starta">Starta</a>
+            <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: right;">Avbryt</a>
+          </div>
+        </div>
+      {{/if}}
+      </form>
+    </div>
+  </div>
+  
   </div>
 {{else}}
   <div id="index-banner" class="parallax-container">
