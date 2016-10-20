@@ -4,6 +4,7 @@ var Register = require('./controllers/Register');
 var Login = require('./controllers/Login');
 var NewRace = require('./controllers/NewRace');
 var Profile = require('./controllers/Profile');
+var Tele = require('./controllers/Tele');
 var UserModel = require('./models/User');
 var currentPage;
 var body;
@@ -38,6 +39,10 @@ window.onload = function() {
     })
     .add('newrace', function() {
       var p = new NewRace();
+      showPage(p);
+    })
+    .add('tele', function() {
+      var p = new Tele();
       showPage(p);
     })
     .add('logout', function() {

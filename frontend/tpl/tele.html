@@ -1,0 +1,37 @@
+<header>
+  <navigation></navigation>
+</header>
+<div class="hero">
+  <h1>Telemetri</h1>
+
+    <div class="row">
+      {{#if error && error != ''}}
+        <div class="error">{{{error}}}</div>
+      {{/if}}
+      {{#if success && success != ''}}
+        <div class="success">{{{success}}}</div>
+      {{/if}}
+        <div class="s10">
+          <div>
+            <a class="waves-effect waves-light blue lighten-1 btn" on-click="checkLink"><i class="material-icons right">send</i>update</a>
+          </div>
+          <div class="divider"></div>
+           <div>
+            <a class="waves-effect waves-light blue lighten-1 btn modal-trigger" href="#modalShowTele"><i class="material-icons right">play_arrow</i>USB</a>
+          </div>
+        </div>
+      </div>
+</div>
+
+<div id="modalShowTele" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <div class ="row"></div>
+    <p class="light">Här skulle man kunna visa AJs mätare.</p>
+  </div>
+    
+  <div class="modal-footer">
+    <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: right;">Avbryt</a>
+  </div>
+</div>
+
+<appfooter />
