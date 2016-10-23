@@ -34,6 +34,15 @@ var processPOSTRequest = function(req, callback) {
     callback(querystring.parse(body));
   });
 };
+var processPOSTRequest2 = function(req, callback) {
+  var body = '';
+  req.on('data', function (data) {
+    body += data.toString();
+  });
+  req.on('end', function () {
+    callback(body);
+  });
+};
 var validEmail = function(value) {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(value);
@@ -109,6 +118,7 @@ module.exports = {
   error: error,
   getDatabaseConnection: getDatabaseConnection,
   processPOSTRequest: processPOSTRequest,
+  processPOSTRequest2: processPOSTRequest2,
   validEmail: validEmail,
   getCurrentUser: getCurrentUser,
   getNextCounter: getNextCounter,

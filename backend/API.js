@@ -11,6 +11,7 @@ Router
 .add('api/content', require('./api/content'))
 .add('api/race/:id', require('./api/race'))
 .add('api/race', require('./api/race'))
+.add('api/link', require('./api/link'))
 .add(require('./api/default'));
 
 module.exports = function(req, res) {

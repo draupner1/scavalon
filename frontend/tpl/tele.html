@@ -1,6 +1,7 @@
 <header>
   <navigation></navigation>
 </header>
+
 <div class="hero">
   <h1>Telemetri</h1>
 
@@ -13,11 +14,11 @@
       {{/if}}
         <div class="s10">
           <div>
-            <a class="waves-effect waves-light blue lighten-1 btn" on-click="checkLink"><i class="material-icons right">send</i>update</a>
+            <p class="light">Här kan man öppna ett fönster som visar realtids mätdata ifrån bilarna. </p>
           </div>
           <div class="divider"></div>
-           <div>
-            <a class="waves-effect waves-light blue lighten-1 btn modal-trigger" href="#modalShowTele"><i class="material-icons right">play_arrow</i>USB</a>
+          <div>
+            <button class="waves-effect waves-light blue lighten-1 btn modal-trigger" href="#modalShowTele"><i class="material-icons right">play_arrow</i>Data</button>
           </div>
         </div>
       </div>
@@ -27,6 +28,12 @@
   <div class="modal-content">
     <div class ="row"></div>
     <p class="light">Här skulle man kunna visa AJs mätare.</p>
+    <div class="divider"></div>
+    {{#wsip}}
+      <a class="light">Kopplar upp mot : {{wsip}} {{wsurl}} !</a>
+    {{else}}
+      <a class="light">Väntar på länk mot banan!</a>
+    {{/wsip}}
   </div>
     
   <div class="modal-footer">

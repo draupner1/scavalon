@@ -24,3 +24,8 @@ curl -H "Content-Type: application/json" -X POST -d @lane2.json http://scavalon-
 
 där filen:lane2.json, innehåller jason-kodat data.
 
+
+curl -H "Content-Type: application/json" -X POST -d @ip2.json http://scavalon-draupner-1.c9users.io/api/link
+curl -H "Content-Type: application/json" -X DELETE http://scavalon-draupner-1.c9users.io/api/link
+
+

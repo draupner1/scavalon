@@ -86,7 +86,6 @@ module.exports = Ractive.extend({
   onunrender: function() {
     var self = this;
     clearInterval( self.interval );
-    
   }
 });
 },{"../../tpl/home":19,"../models/Content":11,"../models/Race":12,"../view/Footer":16,"../view/Navigation":17}],2:[function(require,module,exports){
@@ -293,63 +292,23 @@ module.exports = Ractive.extend({
   onrender: function() {
     var model = new TeleModel();
     var self = this;
-    
-    
-    this.on('showImage', function(file) {
-      this.set('imageFile', "static/uploads/" + file.context);
-      $('#modalShowImage').openModal();
-    });
-    
-    this.on('forgetImage', function() {
-      this.set('imageFile', "");
-    });
-    
-    this.on('setActive', function(index){
-      model.activate(index.context._id, function(error, result) {
-        if(error) {
-          self.set('error', error.error);
-        } else {
-          self.set('error', false);
-          self.set('success', 'The race is prepared successfully.');
-        }
-        getTele();
-      });
-    });
-
-    this.on('create', function() {
-      var files = this.find('input[type="file"]').files;
-      var formData = new FormData();
-      if(files.length > 0) {
-        var file = files[0];
-        if(file.type.match('image.*')) {
-          formData.append('files', file, file.name);
-        }
-      }
-      formData.append('title', this.get('title'));
-      formData.append('descr', this.get('descr'));
-      formData.append('notation', this.get('notation'));
-      model.create(formData, function(error, result) {
-        if(error) {
-          self.set('error', error.error);
-        } else {
-          self.set('error', false);
-          self.set('success', 'The race is prepared successfully.');
-        }
-        getTele();
-      });
-    });
 
     var getTele = function() {
       model.getTele(function(err, result) {
         if(!err) {
-///          self.set('races', result.races);
-///          self.set('activeRace', result.activeRace);
-///          self.set('activeRaceTitle', result.activeRaceTitle);
+          self.set('wsip', result.ip);
+          self.set('wsurl', result.url);
         }
       });
     };
 
     getTele();
+    self.interval = setInterval(getTele, 15000);
+  },
+  
+  onunrender: function() {
+    var self = this;
+    clearInterval( self.interval );
   }
 });
 },{"../../tpl/tele":25,"../models/Tele":13,"../view/Footer":16,"../view/Navigation":17}],7:[function(require,module,exports){
@@ -828,7 +787,7 @@ var ajax = require('../lib/Ajax');
 var Base = require('./Base');
 module.exports = Base.extend({
   data: {
-    url: '/api/tele'
+    url: '/api/link'
   },
   getTele: function(callback) {
     ajax.request({
@@ -837,7 +796,7 @@ module.exports = Base.extend({
       json: true
     })
     .done(function(result) {
-      callback(null, result);
+      callback(null, result.hook[0]);
     })
     .fail(function(xhr) {
       callback(JSON.parse(xhr.responseText));
@@ -951,5 +910,5 @@ module.exports = {"v":3,"t":[{"t":7,"e":"header","f":[{"t":7,"e":"navigation"}]}
 },{}],24:[function(require,module,exports){
 module.exports = {"v":3,"t":[{"t":7,"e":"header","f":[{"t":7,"e":"navigation"}]}," ",{"t":7,"e":"div","a":{"class":"hero"},"f":[{"t":7,"e":"h1","f":["Register"]}]}," ",{"t":7,"e":"div","a":{"class":"row"},"f":[{"t":7,"e":"form","a":{"class":"col s10"},"f":[{"t":7,"e":"div","a":{"class":"row"},"f":[{"t":4,"f":[{"t":7,"e":"div","a":{"class":"error"},"f":[{"t":2,"r":"error"}]}],"n":50,"x":{"r":["error"],"s":"_0&&_0!=\"\""}}," ",{"t":4,"f":[{"t":7,"e":"div","a":{"class":"success"},"f":[{"t":3,"r":"success"}]}],"n":50,"x":{"r":["success"],"s":"_0&&_0!=\"\""}},{"t":4,"n":51,"f":[{"t":7,"e":"div","a":{"class":"s10"},"f":[{"t":7,"e":"div","a":{"class":"input-field"},"f":[{"t":7,"e":"input","a":{"id":"first-name","type":"text","value":[{"t":2,"r":"firstName"}]}}," ",{"t":7,"e":"label","a":{"for":"first-name"},"f":["First name"]}]}," ",{"t":7,"e":"div","a":{"class":"input-field"},"f":[{"t":7,"e":"input","a":{"type":"text","id":"last-name","value":[{"t":2,"r":"lastName"}]}}," ",{"t":7,"e":"label","a":{"for":"last-name"},"f":["Last name"]}]}," ",{"t":7,"e":"div","a":{"class":"input-field"},"f":[{"t":7,"e":"input","a":{"type":"text","id":"email","value":[{"t":2,"r":"email"}],"class":"validate"}}," ",{"t":7,"e":"label","a":{"for":"email"},"f":["Email"]}]}," ",{"t":7,"e":"div","a":{"class":"input-field"},"f":[{"t":7,"e":"input","a":{"type":"password","id":"password","value":[{"t":2,"r":"password"}]}}," ",{"t":7,"e":"label","a":{"for":"password"},"f":["Password"]}]}," ",{"t":7,"e":"div","a":{"class":"row"}}," ",{"t":7,"e":"a","a":{"class":"waves-effect waves-light blue lighten-1 btn"},"v":{"click":"register"},"f":[{"t":7,"e":"i","a":{"class":"material-icons right"},"f":["send"]},"register"]}," "]}],"x":{"r":["success"],"s":"_0&&_0!=\"\""}}]}]}]}," ",{"t":7,"e":"appfooter"}]}
 },{}],25:[function(require,module,exports){
-module.exports = {"v":3,"t":[{"t":7,"e":"header","f":[{"t":7,"e":"navigation"}]}," ",{"t":7,"e":"div","a":{"class":"hero"},"f":[{"t":7,"e":"h1","f":["Telemetri"]}," ",{"t":7,"e":"div","a":{"class":"row"},"f":[{"t":4,"f":[{"t":7,"e":"div","a":{"class":"error"},"f":[{"t":3,"r":"error"}]}],"n":50,"x":{"r":["error"],"s":"_0&&_0!=\"\""}}," ",{"t":4,"f":[{"t":7,"e":"div","a":{"class":"success"},"f":[{"t":3,"r":"success"}]}],"n":50,"x":{"r":["success"],"s":"_0&&_0!=\"\""}}," ",{"t":7,"e":"div","a":{"class":"s10"},"f":[{"t":7,"e":"div","f":[{"t":7,"e":"a","a":{"class":"waves-effect waves-light blue lighten-1 btn"},"v":{"click":"checkLink"},"f":[{"t":7,"e":"i","a":{"class":"material-icons right"},"f":["send"]},"update"]}]}," ",{"t":7,"e":"div","a":{"class":"divider"}}," ",{"t":7,"e":"div","f":[{"t":7,"e":"a","a":{"class":"waves-effect waves-light blue lighten-1 btn modal-trigger","href":"#modalShowTele"},"f":[{"t":7,"e":"i","a":{"class":"material-icons right"},"f":["play_arrow"]},"USB"]}]}]}]}]}," ",{"t":7,"e":"div","a":{"id":"modalShowTele","class":"modal modal-fixed-footer"},"f":[{"t":7,"e":"div","a":{"class":"modal-content"},"f":[{"t":7,"e":"div","a":{"class":"row"}}," ",{"t":7,"e":"p","a":{"class":"light"},"f":["Här skulle man kunna visa AJs mätare."]}]}," ",{"t":7,"e":"div","a":{"class":"modal-footer"},"f":[{"t":7,"e":"a","a":{"class":" modal-action modal-close waves-effect waves-light blue lighten-1 btn","style":"float: right;"},"f":["Avbryt"]}]}]}," ",{"t":7,"e":"appfooter"}]}
+module.exports = {"v":3,"t":[{"t":7,"e":"header","f":[{"t":7,"e":"navigation"}]}," ",{"t":7,"e":"div","a":{"class":"hero"},"f":[{"t":7,"e":"h1","f":["Telemetri"]}," ",{"t":7,"e":"div","a":{"class":"row"},"f":[{"t":4,"f":[{"t":7,"e":"div","a":{"class":"error"},"f":[{"t":3,"r":"error"}]}],"n":50,"x":{"r":["error"],"s":"_0&&_0!=\"\""}}," ",{"t":4,"f":[{"t":7,"e":"div","a":{"class":"success"},"f":[{"t":3,"r":"success"}]}],"n":50,"x":{"r":["success"],"s":"_0&&_0!=\"\""}}," ",{"t":7,"e":"div","a":{"class":"s10"},"f":[{"t":7,"e":"div","f":[{"t":7,"e":"p","a":{"class":"light"},"f":["Här kan man öppna ett fönster som visar realtids mätdata ifrån bilarna."]}]}," ",{"t":7,"e":"div","a":{"class":"divider"}}," ",{"t":7,"e":"div","f":[{"t":7,"e":"button","a":{"class":"waves-effect waves-light blue lighten-1 btn modal-trigger","href":"#modalShowTele"},"f":[{"t":7,"e":"i","a":{"class":"material-icons right"},"f":["play_arrow"]},"Data"]}]}]}]}]}," ",{"t":7,"e":"div","a":{"id":"modalShowTele","class":"modal modal-fixed-footer"},"f":[{"t":7,"e":"div","a":{"class":"modal-content"},"f":[{"t":7,"e":"div","a":{"class":"row"}}," ",{"t":7,"e":"p","a":{"class":"light"},"f":["Här skulle man kunna visa AJs mätare."]}," ",{"t":7,"e":"div","a":{"class":"divider"}}," ",{"t":4,"f":[{"t":7,"e":"a","a":{"class":"light"},"f":["Kopplar upp mot : ",{"t":2,"r":"wsip"}," ",{"t":2,"r":"wsurl"}," !"]}],"r":"wsip"},{"t":4,"n":51,"f":[{"t":7,"e":"a","a":{"class":"light"},"f":["Väntar på länk mot banan!"]}],"r":"wsip"}]}," ",{"t":7,"e":"div","a":{"class":"modal-footer"},"f":[{"t":7,"e":"a","a":{"class":" modal-action modal-close waves-effect waves-light blue lighten-1 btn","style":"float: right;"},"f":["Avbryt"]}]}]}," ",{"t":7,"e":"appfooter"}]}
 },{}]},{},[7])

@@ -2,7 +2,7 @@ var ajax = require('../lib/Ajax');
 var Base = require('./Base');
 module.exports = Base.extend({
   data: {
-    url: '/api/tele'
+    url: '/api/link'
   },
   getTele: function(callback) {
     ajax.request({
@@ -11,7 +11,7 @@ module.exports = Base.extend({
       json: true
     })
     .done(function(result) {
-      callback(null, result);
+      callback(null, result.hook[0]);
     })
     .fail(function(xhr) {
       callback(JSON.parse(xhr.responseText));

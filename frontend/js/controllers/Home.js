@@ -85,6 +85,5 @@ module.exports = Ractive.extend({
   onunrender: function() {
     var self = this;
     clearInterval( self.interval );
-    
   }
 });
