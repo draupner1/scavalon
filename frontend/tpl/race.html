@@ -16,6 +16,7 @@
         <th data-field="image">Bild</th>
         <th data-field="activeRace">Sätt Aktiv</th>
         <th data-field="notation">Notation</th>
+        <th data-field="edit">Editera</th>
       </tr>
     </thead>
 
@@ -45,6 +46,7 @@
               {{races[index].notation}}
             {{/with}}
           </td>
+          <td><a class="waves-effect waves-light blue lighten-1 btn-small" on-click="doEdit:{{index}}"><i class="material-icons">mode_edit</i></a></td>
         </tr>
       {{/each}}
     </tbody>
@@ -80,12 +82,6 @@
     <div class="modal-content">
       <h4>Nytt Race</h4>
       <form enctype="multipart/form-data" method="post">
-      {{#if error && error != ''}}
-        <div class="error">{{error}}</div>
-      {{/if}}
-      {{#if success && success != ''}}
-        <div class="success">{{{success}}}</div>
-      {{else}}
         <div class="s10">
           <div class="input-field">
             <input id="Title" type="text" value="{{title}}"/>
@@ -118,11 +114,50 @@
             <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: right;">Avbryt</a>
           </div>
         </div>
-      {{/if}}
       </form>
     </div>
   </div>
   
+ <div id="modalEditRace" class="modal">
+    <div class="modal-content">
+      <h4>Editera Race</h4>
+      <a class="btn-floating btn waves-effect waves-light red" style="float: right;" on-click="delete:{{edIdx}}"><i class="material-icons">delete</i></a>
+      <form enctype="multipart/form-data" method="post">
+        <div class="s10">
+          <div class="input-field">
+            <input id="Title" type="text" value="{{title}}"/>
+            <label for="Title" class="active">Titel</label>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="descr" value="{{descr}}" />
+            <label for="descr" class="active">Beskrivning</label>
+          </div>
+
+          <div class="file-field input-field">
+            <div class="waves-effect waves-light blue lighten-1 btn">
+              <span>Bild fil</span>
+              <input type="file">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" value="{{file}}">
+            </div>
+          </div>
+
+          <div class="input-field">
+            <input type="text" id="notation" value="{{notation}}" />
+            <label for="notation" class="active">Notation</label>
+          </div>
+
+          <div class ="row"></div>
+          <div class="modal-footer">
+            <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: left;" on-click="uppdatera">Uppdatera</a>
+            <a class=" modal-action modal-close waves-effect waves-light blue lighten-1 btn" style="float: right;">Avbryt</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
   
   <div id="modalShowImage" class="modal modal-fixed-footer">
     <div class="modal-content">

@@ -10,8 +10,6 @@ module.exports = Ractive.extend({
   onrender: function() {
     var model = new RaceModel();
     var self = this;
-    this.observe('firstLane', model.setter('firstlane'));
-    this.observe('secondLane', model.setter('secondlane'));
     var raceId = this.get('raceId');
     
     if(raceId) {
@@ -51,7 +49,62 @@ module.exports = Ractive.extend({
         getRaces();
       });
     });
-
+    
+    this.on('doEdit', function(index) {
+      var theraces = self.get('races');
+      var id = index.index.index;
+      self.set('title', theraces[id].title);
+      self.set('descr', theraces[id].descr);
+      self.set('file', theraces[id].file);
+      self.set('notation', theraces[id].notation);
+      self.set('edIdx', theraces[id]._id);
+      $('#modalEditRace').openModal();
+    });
+    
+    this.on('uppdatera', function() {
+      var files = this.find('input[type="file"]').files;
+      var formData = new FormData();
+      if(files.length > 0) {
+        var file = files[0];
+        if(file.type.match('image.*')) {
+          formData.append('files', file, file.name);
+        }
+      }
+      formData.append('title', self.get('title'));
+      formData.append('descr', self.get('descr'));
+      formData.append('notation', self.get('notation'));
+      formData.append('_id', self.get('edIdx'));
+      model.update(formData, self.get('edIdx'), function(error, result) {
+        if(error) {
+          self.set('error', error.error);
+        } else {
+          self.set('error', false);
+          self.set('success', 'The race is prepared successfully.');
+        }
+        getRaces();
+      });
+    });
+    
+    this.on('delete', function(index) {
+      var id = index.context.edIdx;
+      model.delete(id, function(error, result){
+        if(error) {
+          self.set('error', error.error);
+        } else {
+          self.set('error', false);
+          self.set('success', 'The race is deleted successfully.');
+          $('#modalEditRace').closeModal();
+          self.set('title', '');
+          self.set('descr', '');
+          self.set('file', '');
+          self.set('notation', '');
+          self.set('edIdx', 0);
+        }
+        getRaces();
+        
+      });
+    });
+    
     this.on('create', function() {
       var files = this.find('input[type="file"]').files;
       var formData = new FormData();

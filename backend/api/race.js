@@ -27,7 +27,7 @@ module.exports = function(req, res, params) {
       getActiveRaceTitle( function(title){
         raceTitle = title;
         getDatabaseConnection(function(db) {
-          var query = params && params.id ? { _id: ObjectId(params.id) } : {};
+          var query = params && params.id ? { _id: ObjectId(parseInt(params.id, 10)) } : {};
         
           getActiveRace( function(id){
             raceId = id;
@@ -48,9 +48,8 @@ module.exports = function(req, res, params) {
           });
         });
       });
-      
-
     break;
+    
     case 'POST':
       var uploadDir = __dirname + '/../../static/uploads/';
       var formidable = require('formidable');
@@ -110,19 +109,22 @@ module.exports = function(req, res, params) {
     break;
     
   case 'PUT':
-    processPOSTRequest(req, function(data) {
-      if(!data.activeRace || data.activeRace === '') {
-        error('Please the id of the race to activate.', res);
-      } else {
-        data.activeRace = parseInt(data.activeRace, 10);
-        getDatabaseConnection(function(db) {
-          var collection = db.collection('counters');
-          collection.update(
+    var query = params && params.id ? { _id: parseInt(params.id, 10) } : {};
+    if(query === {}) {
+      processPOSTRequest(req, function(data) {
+      
+        if(!data.activeRace || data.activeRace === '') {
+          error('Please the id of the race to activate.', res);
+        } else {
+          data.activeRace = parseInt(data.activeRace, 10);
+          getDatabaseConnection(function(db) {
+            var collection = db.collection('counters');
+            collection.update(
               { _id:"active" },
               { $set: {"seq":data.activeRace} }, 
               function(err, result) {
                 if(err) {
-                  err('Error updating the data.');
+                  error('Error updating the data.', res);
                 } else {
                   response({
                     success: 'OK'
@@ -133,5 +135,73 @@ module.exports = function(req, res, params) {
           });
         }
       });
+    }
+    else
+    {
+      var formidable = require('formidable');
+      var form = new formidable.IncomingForm();
+      form.multiples = true;
+      form.parse(req, function(err, formData, files) {
+        if (err) {
+          console.log("Nu blev det fel i RacePUT update");
+          error("fel i update", res);
+        }
+        else
+        {
+        var data = {
+          descr: formData.descr,
+          notation: formData.notation,
+          title: formData.title
+        };
+
+//            var processFiles = function(userId, cb) {
+//              if(files.files) {
+//                var fileName = files.files.name;
+//                var filePath = uploadDir + fileName;
+//                fs.rename(files.files.path, filePath, function() {
+//                  cb(fileName);
+//                });
+//              } else {
+//                cb();
+//              }
+//            };
+
+            var done = function() {
+              response({
+                success: 'OK'
+              }, res);
+            };
+          
+            getDatabaseConnection(function(db) {
+              var collection = db.collection('races');
+               /// processFiles(user._id, function(file) {
+               ///   if(file) {
+               ///     data.file = file;
+               ///   }
+              collection.update(query, {$set: data}, {}, done);
+            }, req, res);
+          
+          }
+        });
+      }
+
+  case 'DELETE':
+    var id = params && params.id ?  parseInt(params.id, 10) : 0;
+    var done = function() {
+      response({
+        success: 'OK'
+      }, res);
+    };
+    
+    if(id !== 0) {
+      getDatabaseConnection(function(db) {
+        var collection = db.collection('races');
+          collection.remove({_id:id}, {justOne: true}, done);
+      }, req, res);
+    } else {
+      console.error("No index to remove from Race db");
+    }
+
+    break;
   }
 };
