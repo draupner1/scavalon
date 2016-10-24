@@ -184,6 +184,7 @@ module.exports = function(req, res, params) {
           }
         });
       }
+    break;
 
   case 'DELETE':
     var id = params && params.id ?  parseInt(params.id, 10) : 0;
