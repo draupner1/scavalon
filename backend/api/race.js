@@ -110,7 +110,7 @@ module.exports = function(req, res, params) {
     
   case 'PUT':
     var query = params && params.id ? { _id: parseInt(params.id, 10) } : {};
-    if(query === {}) {
+    if(!(params && params.id)) {
       processPOSTRequest(req, function(data) {
       
         if(!data.activeRace || data.activeRace === '') {
